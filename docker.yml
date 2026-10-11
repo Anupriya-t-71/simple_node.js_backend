@@ -1,0 +1,17 @@
+- name: install docker and docker compose
+  hosts: jenkins
+  become: true
+  tasks: 
+   - name: install 
+     ansible.builtin.apt:
+      name:
+       - docker.io
+       - docker-compose-v2
+      state: present
+      upadate_cache: true 
+
+   - name: start docker
+     ansible.builtin.service:
+      name: docker
+      state: started
+      enabled: true   
