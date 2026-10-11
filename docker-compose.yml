@@ -1,0 +1,31 @@
+services:
+  mongodb:
+    image: mongo:4.4
+    container_name: mongo
+    ports:
+      - "27017"
+
+  auth-service:
+    build: ./auth-service
+    image: anupriyathavasiraj/auth-service:latest
+    container_name: auth-service
+    ports:
+      - "3001:3001"
+    environment:
+      MONGO_URI: mongodb://mongodb:27017/authdb
+      JWT_SECRET: YOUR_SECRET_KEY_HERE
+      JWT_EXPIRES_IN: 1h
+    depends_on:
+      - mongodb
+
+  product-service:
+    build: ./product-service
+    image: anupriyathavasiraj/product-service:latest
+    container_name: product-service
+    ports:
+      - "3002:3002"
+    environment:
+      MONGO_URI: mongodb://mongodb:27017/productdb
+      JWT_SECRET: YOUR_SECRET_KEY_HERE
+    depends_on:
+      - mongodb
