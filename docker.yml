@@ -8,7 +8,7 @@
        - docker.io
        - docker-compose-v2
       state: present
-      upadate_cache: true 
+      update_cache: true 
 
    - name: start docker
      ansible.builtin.service:
