@@ -7,7 +7,7 @@ services:
 
   auth-service:
     build: ./auth-service
-    image: anupriyathavasiraj/auth-service:latest
+    image: 16.4.23.201:8090/backend/auth-service:latest
     container_name: auth-service
     ports:
       - "3001:3001"
@@ -20,7 +20,7 @@ services:
 
   product-service:
     build: ./product-service
-    image: anupriyathavasiraj/product-service:latest
+    image: 16.4.23.201:8090/backend/product-service:latest
     container_name: product-service
     ports:
       - "3002:3002"
