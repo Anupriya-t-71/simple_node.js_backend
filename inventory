@@ -1,2 +1,2 @@
 [jenkins]
-13.202.73.246 ansible_user=ubuntu ansible_ssh_private_key_file=./frontend.pem
+16.4.23.201 ansible_user=ubuntu ansible_ssh_private_key_file=./frontend.pem
