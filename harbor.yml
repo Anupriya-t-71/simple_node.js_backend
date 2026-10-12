@@ -1,0 +1,68 @@
+- name: harbor installation
+  hosts: 16.4.23.201
+  become: true
+  tasks:
+   
+   - name: install requirements
+     ansible.builtin.apt:
+      name: 
+       - docker.io 
+       - docker-compose-v2
+       - curl 
+       - wget
+      state: present
+      update_cache: true
+
+   - name: start docker
+     ansible.builtin.service: 
+      name: docker
+      state: started
+      enabled: true
+
+   - name: harbor installer
+     ansible.builtin.get-url:
+      url: https://github.com/goharbor/harbor/releases/download/v2.15.4/harbor-online-installer-v2.15.4.tgz
+      dest: /tmp/harbor-installer.tgz 
+
+   - name: extract harbor
+     ansible.builtin.unarchive:
+      src: /tmp/harbor-installer.tgz
+      dest: /opt
+      remote_src: true
+
+   - name: configure hostname
+     anisble.builtin.replace:
+      path: /opt/host/harbor.yml.tmpl
+      regexp: "^hostname:.*"
+      replace: "#hostname: ip"  
+
+   - name: create harbor configure
+     ansible.builtin.copy:
+      src: /opt/harbor/harbor.yml.tmpl  
+      dest: /opt/harbor/harbor.yml
+
+   - name: disable https
+     ansible.builtin.replace:
+      path: /opt/harbor/harbor.yml
+      regexp: "^https"
+      replace: "#https"   
+
+   - name: disable port
+     ansible.builtin.replace:
+      path: /opt/harbor/harbor.yml
+      regexp: "^port:.*"
+      replace: "#port: 443"
+
+   - name: executable scripts
+     ansible.builtin.file:
+      path: /opt/harbor/prepare
+      mode: "0755"
+      recurse: false
+
+   - name: install harbor
+     ansible.builtin.command: ./install.sh
+     args:
+      chdir: /opt/harbor      
+
+
+       
